@@ -5,33 +5,35 @@ import * as THREE from "three";
 
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { PCDLoader } from "three/addons/loaders/PCDLoader.js";
-import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+
+// HELPER/UTIL FUNCTIONS
+const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
 
 let camera, scene, renderer;
+let pastriver, initialQuaternion;
+const clock = new THREE.Clock();
 
 init();
 render();
 
 function init() {
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera(
+    50, // fov gives a fish eye effect
+    window.innerWidth / window.innerHeight,
+    0.1,
+    2000
+  );
+  // sets the camera to Top View and adjust initial zoom
+  camera.position.set(0, 0, 300);
+
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  scene = new THREE.Scene();
-
-  camera = new THREE.PerspectiveCamera(
-    50,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    2000
-  );
-
-  camera.position.set(0, 0, 1); // sets the camera to Top View
-  // TODO: adjust initial zoom
-  // TODO: generate static version to embed on a webpage
   // TODO: reset button to get control to initial state
-  // camera.zoom = 0.5;
   scene.add(camera);
 
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -40,44 +42,65 @@ function init() {
   controls.maxDistance = 500;
 
   const loader = new PCDLoader();
-  // points is an Object3D
+  // 'points' is an Object3D
   loader.load("./odm_georeferenced_model_subsampled.pcd", function (points) {
-    points.geometry.center();
-    points.name = "River.pcd";
+    pastriver = points;
+    pastriver.geometry.center();
+    pastriver.name = "river.pcd";
 
-    const gui = new GUI();
+    // Rotation uses Euler angle in rad
+    // z rotation: positive is counter-clockwise, negative is clockwise
+    pastriver.rotation.z = deg_to_rad(55); // make it horizontal rectangle from top view
+    // x rotation: positive rotates towards user view, negative increases the angle away from the user view
+    // points.rotation.x = -deg_to_rad(90);
+    // y rotation: at this point, like the pitch angle
+    pastriver.rotation.y = deg_to_rad(10);
 
     // Set static size
-    points.material.size = 1.2;
-    points.material.color.setHex(0xffffff); // this set color of point cloud to red
-    // gui.add(points.material, "size", 0.05, 1.5).onChange(render);
-    // gui.addColor(points.material, "color").onChange(render);
-    gui.open();
+    pastriver.material.size = 1.2;
+    pastriver.material.color.setHex(0xff0000); // this set color of point cloud to red
 
-    scene.add(points);
-
-    render();
-  });
-
-  loader.load("./odm_georeferenced_model_subsampled.pcd", function (points) {
-    points.geometry.center();
-    points.name = "River_past.pcd";
-
-    const gui = new GUI();
-
-    // Set static size
-    points.material.size = 1.2;
-    points.material.color.setHex(0xff0000); // this set color of point cloud to red
-    // gui.add(points.material, "size", 0.05, 1.5).onChange(render);
-    // gui.addColor(points.material, "color").onChange(render);
-    gui.open();
-
-    scene.add(points);
+    initialQuaternion = pastriver.quaternion;
+    scene.add(pastriver);
 
     render();
   });
 
   window.addEventListener("resize", onWindowResize);
+
+  // Add reset button behavior
+  document.getElementById("reset").addEventListener("click", animate);
+}
+
+function onReset() {
+  console.log("reste button clicked");
+  requestAnimationFrame(render);
+
+  // Rotation uses Euler angle in rad
+  // z rotation: positive is counter-clockwise, negative is clockwise
+  pastriver.rotation.z = deg_to_rad(55); // make it horizontal rectangle from top view
+  // x rotation: positive rotates towards user view, negative increases the angle away from the user view
+  // points.rotation.x = -deg_to_rad(90);
+  // y rotation: at this point, like the pitch angle
+  pastriver.rotation.y = deg_to_rad(10);
+
+  // Set static size
+  pastriver.material.size = 1.2;
+  pastriver.material.color.setHex(0xff0000); // this set color of point cloud to red
+
+  // render();
+  console.log("rotation done");
+}
+
+function animate() {
+  const delta = clock.getDelta();
+
+  if (!pastriver.quaternion.equals(initialQuaternion)) {
+    const step = speed * delta;
+    pastriver.quaternion.rotateTowards(initialQuaternion, step);
+  }
+
+  renderer.render(scene, camera);
 }
 
 function onWindowResize() {
