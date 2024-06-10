@@ -11,9 +11,6 @@ const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
 
 let container, camera, scene, renderer;
 let sceneL, sceneR;
-let pastriver, initialQuaternion;
-let currentriver;
-const clock = new THREE.Clock();
 
 init();
 render();
@@ -48,63 +45,27 @@ function init() {
   const loader = new PCDLoader();
   // 'points' is an Object3D
   loader.load("./odm_georeferenced_model_subsampled.pcd", function (points) {
-    pastriver = points;
-    pastriver.geometry.center();
-    pastriver.name = "river.pcd";
+    points.geometry.center();
+    points.name = "river.pcd";
 
     // Rotation uses Euler angle in rad
     // z rotation: positive is counter-clockwise, negative is clockwise
-    pastriver.rotation.z = deg_to_rad(55); // make it horizontal rectangle from top view
+    points.rotation.z = deg_to_rad(55); // make it horizontal rectangle from top view
     // x rotation: positive rotates towards user view, negative increases the angle away from the user view
     // points.rotation.x = -deg_to_rad(90);
     // y rotation: at this point, like the pitch angle
-    pastriver.rotation.y = deg_to_rad(10);
+    points.rotation.y = deg_to_rad(10);
 
     // Set static size
-    pastriver.material.size = 1.2;
-    pastriver.material.color.setHex(0xff0000); // this set color of point cloud to red
+    points.material.size = 1.2;
+    points.material.color.setHex(0xff0000); // this set color of point cloud to red
 
-    initialQuaternion = pastriver.quaternion;
-    scene.add(pastriver);
+    scene.add(points);
 
     render();
   });
 
   window.addEventListener("resize", onWindowResize);
-
-  // Add reset button behavior
-  document.getElementById("reset").addEventListener("click", animate);
-}
-
-function onReset() {
-  console.log("reste button clicked");
-  requestAnimationFrame(render);
-
-  // Rotation uses Euler angle in rad
-  // z rotation: positive is counter-clockwise, negative is clockwise
-  pastriver.rotation.z = deg_to_rad(55); // make it horizontal rectangle from top view
-  // x rotation: positive rotates towards user view, negative increases the angle away from the user view
-  // points.rotation.x = -deg_to_rad(90);
-  // y rotation: at this point, like the pitch angle
-  pastriver.rotation.y = deg_to_rad(10);
-
-  // Set static size
-  pastriver.material.size = 1.2;
-  pastriver.material.color.setHex(0xff0000); // this set color of point cloud to red
-
-  // render();
-  console.log("rotation done");
-}
-
-function animate() {
-  const delta = clock.getDelta();
-
-  if (!pastriver.quaternion.equals(initialQuaternion)) {
-    const step = speed * delta;
-    pastriver.quaternion.rotateTowards(initialQuaternion, step);
-  }
-
-  renderer.render(scene, camera);
 }
 
 function onWindowResize() {
