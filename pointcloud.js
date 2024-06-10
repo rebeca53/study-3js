@@ -9,14 +9,18 @@ import { PCDLoader } from "three/addons/loaders/PCDLoader.js";
 // HELPER/UTIL FUNCTIONS
 const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
 
-let camera, scene, renderer;
+let container, camera, scene, renderer;
+let sceneL, sceneR;
 let pastriver, initialQuaternion;
+let currentriver;
 const clock = new THREE.Clock();
 
 init();
 render();
 
 function init() {
+  container = document.querySelector(".container");
+
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera(
@@ -31,7 +35,7 @@ function init() {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+  container.appendChild(renderer.domElement);
 
   // TODO: reset button to get control to initial state
   scene.add(camera);

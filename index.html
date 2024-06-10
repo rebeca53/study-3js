@@ -16,12 +16,35 @@
       body {
         margin: 0;
       }
+
+      .container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: ew-resize;
+
+        width: 40px;
+        height: 40px;
+        background-color: #f32196;
+        opacity: 0.7;
+        border-radius: 50%;
+
+        top: calc(50% - 20px);
+        left: calc(50% - 20px);
+      }
     </style>
   </head>
   <body>
     <div id="zoom">Zoom/unzoom the scene</div>
     <button id="reset">Reset view</button>
     <!-- <script type="module" src="/main.js"></script> -->
+    <div class="container">
+      <div class="slider"></div>
+    </div>
     <script type="module" src="/pointcloud.js"></script>
   </body>
 </html>
