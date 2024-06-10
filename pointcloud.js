@@ -94,8 +94,13 @@ function initMeshes() {
     // x rotation: positive rotates towards user view, negative increases the angle away from the user view
     // points.rotation.x = -deg_to_rad(90);
     // y rotation: at this point, like the pitch angle
-    points.rotation.y = deg_to_rad(10);
+    // points.rotation.y = deg_to_rad(10);
 
+    points.translateX(10);
+    points.translateY(-6);
+
+    let scale = 1.1;
+    points.scale.set(scale, scale, scale);
     // Set static size
     points.material.size = 1.2;
 
@@ -103,7 +108,7 @@ function initMeshes() {
   });
 
   // 'points' is an Object3D
-  loader.load("./2024_model_subsampled.pcd", function (points) {
+  loader.load("./cloud8786d920b00cdd1a_subsampled.pcd", function (points) {
     points.geometry.center();
     points.name = "river2024.pcd";
 
@@ -113,7 +118,7 @@ function initMeshes() {
     // x rotation: positive rotates towards user view, negative increases the angle away from the user view
     // points.rotation.x = -deg_to_rad(90);
     // y rotation: at this point, like the pitch angle
-    points.rotation.y = deg_to_rad(10);
+    // points.rotation.y = deg_to_rad(10);
 
     // Set static size
     points.material.size = 1.2;
@@ -127,7 +132,7 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
-} 
+}
 
 function animate() {
   renderer.setScissor(0, 0, sliderPos, window.innerHeight);
