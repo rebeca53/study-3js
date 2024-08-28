@@ -1,8 +1,8 @@
 /**
- * Code from three.js examples
+ * Point Cloud Comparison using Three.js
+ * Author: Rebeca Nunes Rodrigues (rebeca.n.rod@gmail.com)
  */
 import * as THREE from "three";
-
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { PCDLoader } from "three/addons/loaders/PCDLoader.js";
 
@@ -11,13 +11,16 @@ const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
 
 let container, camera, renderer, controls;
 let sceneL, sceneR;
-let sliderPos = window.innerWidth / 2;
-
-init();
-render();
+let sliderPos;
+const url2022 = "./odm_georeferenced_model_subsampled.pcd";
+const url2024 = "./cloud8786d920b00cdd1a_subsampled.pcd";
+document.addEventListener("DOMContentLoaded", () => {
+  init();
+});
 
 function init() {
   container = document.querySelector(".container");
+  sliderPos = window.innerWidth / 2;
 
   sceneL = new THREE.Scene();
   sceneL.background = new THREE.Color(0xbcd48f);
@@ -38,11 +41,11 @@ function init() {
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setScissorTest(true);
-  renderer.setAnimationLoop(animate);
   container.appendChild(renderer.domElement);
 
   // TODO: reset button to get control to initial state
   controls = new OrbitControls(camera, renderer.domElement);
+  controls.addEventListener("change", animate);
 
   initSlider();
   initMeshes();
@@ -72,9 +75,14 @@ function initSlider() {
   function onPointerMove(e) {
     if (event.isPrimary === false) return;
 
+    // Check if pointer position (pageX) is inside the container
     sliderPos = Math.max(0, Math.min(window.innerWidth, e.pageX));
+    // const leftContainer = container.offsetLeft;
+    // const rightContainer = container.clientWidth + container.offsetLeft;
+    // sliderPos = Math.max(0, Math.min(rightContainer, e.pageX) - leftContainer);
 
     slider.style.left = sliderPos - slider.offsetWidth / 2 + "px";
+    animate();
   }
 
   slider.style.touchAction = "none"; // disable touch scroll
@@ -84,7 +92,8 @@ function initSlider() {
 function initMeshes() {
   const loader = new PCDLoader();
   // 'points' is an Object3D
-  loader.load("./odm_georeferenced_model_subsampled.pcd", function (points) {
+  loader.load(url2022, function (points) {
+    // loader.load("./odm_georeferenced_model_subsampled.pcd", function (points) {
     points.geometry.center();
     points.name = "river.pcd";
 
@@ -105,10 +114,12 @@ function initMeshes() {
     points.material.size = 1.2;
 
     sceneL.add(points);
+    animate();
   });
 
   // 'points' is an Object3D
-  loader.load("./cloud8786d920b00cdd1a_subsampled.pcd", function (points) {
+  loader.load(url2024, function (points) {
+    // loader.load("./cloud8786d920b00cdd1a_subsampled.pcd", function (points) {
     points.geometry.center();
     points.name = "river2024.pcd";
 
@@ -124,6 +135,7 @@ function initMeshes() {
     points.material.size = 1.2;
 
     sceneR.add(points);
+    animate();
   });
 }
 
