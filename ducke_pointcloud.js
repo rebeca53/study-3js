@@ -14,10 +14,8 @@ let sceneL, sceneR;
 let slider;
 let sliderPos;
 let loadingLeft, loadingRight;
-const url2017 = "./odm_georeferenced_model_subsampled.pcd";
-const url2021 = "./cloud8786d920b00cdd1a_subsampled.pcd";
-// const url2017 = "./out.subsampled.pcd";
-// const url2021 = "./ducke2021out.subsampled.pcd";
+const url2017 = "./out.subsampled.pcd";
+const url2021 = "./ducke2021out.subsampled.pcd";
 document.addEventListener("DOMContentLoaded", () => {
   init();
 });
@@ -39,10 +37,10 @@ function init() {
     50, // fov gives a fish eye effect
     container.clientWidth / container.clientHeight,
     0.1,
-    2000
+    6000
   );
   // sets the camera to Top View and adjust initial zoom
-  camera.position.set(0, 0, 300);
+  camera.position.set(0, 0, 2000);
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
