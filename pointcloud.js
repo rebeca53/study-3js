@@ -89,7 +89,7 @@ function initSlider() {
     const rightContainer = container.clientWidth + container.offsetLeft;
     sliderPos = Math.max(0, Math.min(rightContainer, e.pageX) - leftContainer);
 
-    slider.style.left = sliderPos + leftContainer - 10 + "px";
+    slider.style.left = sliderPos - slider.offsetWidth / 4 + "px";
 
     animate();
   }
