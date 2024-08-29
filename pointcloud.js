@@ -12,15 +12,17 @@ const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
 let container, camera, renderer, controls;
 let sceneL, sceneR;
 let sliderPos;
-const url2022 = "./odm_georeferenced_model_subsampled.pcd";
-const url2024 = "./cloud8786d920b00cdd1a_subsampled.pcd";
+const url2017 = "./odm_georeferenced_model_subsampled.pcd";
+const url2021 = "./cloud8786d920b00cdd1a_subsampled.pcd";
+// const url2017 = "./out.subsampled.pcd";
+// const url2021 = "./ducke2021out.subsampled.pcd";
 document.addEventListener("DOMContentLoaded", () => {
   init();
 });
 
 function init() {
   container = document.querySelector(".container");
-  sliderPos = window.innerWidth / 2;
+  sliderPos = container.clientWidth / 2;
 
   sceneL = new THREE.Scene();
   sceneL.background = new THREE.Color(0xbcd48f);
@@ -30,7 +32,7 @@ function init() {
 
   camera = new THREE.PerspectiveCamera(
     50, // fov gives a fish eye effect
-    window.innerWidth / window.innerHeight,
+    container.clientWidth / container.clientHeight,
     0.1,
     2000
   );
@@ -39,7 +41,7 @@ function init() {
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setScissorTest(true);
   container.appendChild(renderer.domElement);
 
@@ -76,10 +78,10 @@ function initSlider() {
     if (event.isPrimary === false) return;
 
     // Check if pointer position (pageX) is inside the container
-    sliderPos = Math.max(0, Math.min(window.innerWidth, e.pageX));
-    // const leftContainer = container.offsetLeft;
-    // const rightContainer = container.clientWidth + container.offsetLeft;
-    // sliderPos = Math.max(0, Math.min(rightContainer, e.pageX) - leftContainer);
+    // sliderPos = Math.max(0, Math.min(window.innerWidth, e.pageX));
+    const leftContainer = container.offsetLeft;
+    const rightContainer = container.clientWidth + container.offsetLeft;
+    sliderPos = Math.max(0, Math.min(rightContainer, e.pageX) - leftContainer);
 
     slider.style.left = sliderPos - slider.offsetWidth / 2 + "px";
     animate();
@@ -92,7 +94,7 @@ function initSlider() {
 function initMeshes() {
   const loader = new PCDLoader();
   // 'points' is an Object3D
-  loader.load(url2022, function (points) {
+  loader.load(url2017, function (points) {
     // loader.load("./odm_georeferenced_model_subsampled.pcd", function (points) {
     points.geometry.center();
     points.name = "river.pcd";
@@ -100,10 +102,10 @@ function initMeshes() {
     // Rotation uses Euler angle in rad
     // z rotation: positive is counter-clockwise, negative is clockwise
     points.rotation.z = deg_to_rad(55); // make it horizontal rectangle from top view
-    // x rotation: positive rotates towards user view, negative increases the angle away from the user view
-    // points.rotation.x = -deg_to_rad(90);
-    // y rotation: at this point, like the pitch angle
-    // points.rotation.y = deg_to_rad(10);
+    // // x rotation: positive rotates towards user view, negative increases the angle away from the user view
+    // // points.rotation.x = -deg_to_rad(90);
+    // // y rotation: at this point, like the pitch angle
+    // // points.rotation.y = deg_to_rad(10);
 
     points.translateX(10);
     points.translateY(-6);
@@ -118,7 +120,7 @@ function initMeshes() {
   });
 
   // 'points' is an Object3D
-  loader.load(url2024, function (points) {
+  loader.load(url2021, function (points) {
     // loader.load("./cloud8786d920b00cdd1a_subsampled.pcd", function (points) {
     points.geometry.center();
     points.name = "river2024.pcd";
@@ -140,16 +142,21 @@ function initMeshes() {
 }
 
 function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = container.clientWidth / container.clientHeight;
   camera.updateProjectionMatrix();
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(container.clientWidth, container.clientHeight);
 }
 
 function animate() {
-  renderer.setScissor(0, 0, sliderPos, window.innerHeight);
+  renderer.setScissor(0, 0, sliderPos, container.clientHeight);
   renderer.render(sceneL, camera);
 
-  renderer.setScissor(sliderPos, 0, window.innerWidth, window.innerHeight);
+  renderer.setScissor(
+    sliderPos,
+    0,
+    container.clientWidth,
+    container.clientHeight
+  );
   renderer.render(sceneR, camera);
 }
