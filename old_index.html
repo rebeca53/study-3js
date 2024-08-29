@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@v0.165.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.165.0/examples/jsm/"
+    }
+  }
+</script>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>3D Visualization of the Ducke Reserve</title>
+    <style>
+      body {
+        margin: 0;
+      }
+
+      .container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: ew-resize;
+
+        width: 40px;
+        height: 40px;
+        background-color: #f32196;
+        opacity: 0.7;
+        border-radius: 50%;
+
+        top: calc(50% - 20px);
+        left: calc(50% - 20px);
+      }
+
+      .main {
+        
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <script type="module" src="/main.js"></script> -->
+    <div class="main">
+      <div class="container">
+        <div class="slider"></div>
+      </div>
+    </div>
+    <script type="module" src="/pointcloud.js"></script>
+  </body>
+</html>
