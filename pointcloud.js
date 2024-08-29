@@ -10,14 +10,12 @@ import { PCDLoader } from "three/addons/loaders/PCDLoader.js";
 const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
 
 let container, camera, renderer, controls;
-let sceneL, sceneR;
+let leftScene, rightScene;
 let slider;
 let sliderPos;
 let loadingLeft, loadingRight;
 const url2017 = "./odm_georeferenced_model_subsampled.pcd";
 const url2021 = "./cloud8786d920b00cdd1a_subsampled.pcd";
-// const url2017 = "./out.subsampled.pcd";
-// const url2021 = "./ducke2021out.subsampled.pcd";
 document.addEventListener("DOMContentLoaded", () => {
   init();
 });
@@ -29,11 +27,11 @@ function init() {
   loadingRight = document.querySelector(".loading-right");
   slider = document.querySelector(".slider");
 
-  sceneL = new THREE.Scene();
-  sceneL.background = new THREE.Color(0xbcd48f);
+  leftScene = new THREE.Scene();
+  leftScene.background = new THREE.Color(0xbcd48f);
 
-  sceneR = new THREE.Scene();
-  sceneR.background = new THREE.Color(0x8fbcd4);
+  rightScene = new THREE.Scene();
+  rightScene.background = new THREE.Color(0x8fbcd4);
 
   camera = new THREE.PerspectiveCamera(
     50, // fov gives a fish eye effect
@@ -125,7 +123,7 @@ function initMeshes() {
     // Set static size
     points.material.size = 1.2;
 
-    sceneL.add(points);
+    leftScene.add(points);
     animate();
     loadingLeft.style.visibility = "hidden";
   });
@@ -147,7 +145,7 @@ function initMeshes() {
     // Set static size
     points.material.size = 1.2;
 
-    sceneR.add(points);
+    rightScene.add(points);
     animate();
     loadingRight.style.visibility = "hidden";
   });
@@ -164,7 +162,7 @@ function animate() {
   slider.style.visibility = "visible";
 
   renderer.setScissor(0, 0, sliderPos, container.clientHeight);
-  renderer.render(sceneL, camera);
+  renderer.render(leftScene, camera);
 
   renderer.setScissor(
     sliderPos,
@@ -172,5 +170,5 @@ function animate() {
     container.clientWidth,
     container.clientHeight
   );
-  renderer.render(sceneR, camera);
+  renderer.render(rightScene, camera);
 }
