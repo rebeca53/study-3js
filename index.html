@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@v0.165.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.165.0/examples/jsm/"
+    }
+  }
+</script>
+
 <html lang="en" class="h-100" data-bs-theme="auto">
   <head>
     <script src="./assets/js/color-modes.js"></script>
@@ -11,7 +20,7 @@
       content="Mark Otto, Jacob Thornton, and Bootstrap contributors"
     />
     <meta name="generator" content="Hugo 0.122.0" />
-    <title>Cover Template · Bootstrap v5.3</title>
+    <title>Visualization of LIDAR survey data</title>
 
     <link
       rel="canonical"
@@ -103,12 +112,31 @@
       .bd-mode-toggle .dropdown-menu .active .bi {
         display: block !important;
       }
+
+      .container {
+        width: auto;
+        height: 300px;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: ew-resize;
+
+        width: 40px;
+        height: 40px;
+        background-color: #f32196;
+        opacity: 0.7;
+        border-radius: 50%;
+
+        top: calc(50% - 60px);
+        left: calc(50% - 10px);
+      }
     </style>
 
     <!-- Custom styles for this template -->
     <link href="cover.css" rel="stylesheet" />
   </head>
-  <body class="d-flex h-100 text-center text-bg-dark">
+  <body class="d-flex text-center text-bg-dark">
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
       <symbol id="check2" viewBox="0 0 16 16">
         <path
@@ -204,31 +232,51 @@
       </ul>
     </div>
 
-    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-      <header class="mb-auto">
+    <div class="cover-container d-flex w-100 p-3 mx-auto flex-column">
+      <header class="mb-5">
         <div>
-          <h3 class="float-md-start mb-0">Cover</h3>
+          <h3 class="float-md-start mb-0">
+            3D Visualization of Urban Nature Areas
+          </h3>
           <nav class="nav nav-masthead justify-content-center float-md-end">
             <a
               class="nav-link fw-bold py-1 px-0 active"
               aria-current="page"
               href="#"
-              >Home</a
+              >Aa River (DE)</a
             >
-            <a class="nav-link fw-bold py-1 px-0" href="#">Features</a>
+            <a class="nav-link fw-bold py-1 px-0" href="#"
+              >Ducke Reserve (BR)</a
+            >
             <a class="nav-link fw-bold py-1 px-0" href="#">Contact</a>
           </nav>
         </div>
       </header>
 
       <main class="px-3">
-        <h1>Cover your page.</h1>
+        <h1>Explore the Aa River.</h1>
+
+        <div class="container mx-auto">
+          <div class="slider"></div>
+        </div>
+
         <p class="lead">
-          Cover is a one-page template for building simple and beautiful home
-          pages. Download, edit the text, and add your own fullscreen background
-          photo to make it your own.
+          "The renaturalization of streams is a common strategy for improving
+          the ecological quality of water bodies as mandated by the European
+          Water Directive. For that reason, parts of the Aa stream in Münster
+          upstream until its flow into the Aa lake covering 2.6 km were
+          renaturalized from 2012 to 2013." (check
+          <a
+            href="https://una.city/nbs/munster/renaturalization-aa-stream-munster-area"
+            target="_blank"
+            >source</a
+          >)
         </p>
+
         <p class="lead">
+          This project compares the Aa River in 2018 and the Aa River in 2024.
+        </p>
+        <p class="lead mt-5">
           <a href="#" class="btn btn-lg btn-light fw-bold border-white bg-white"
             >Learn more</a
           >
@@ -243,6 +291,8 @@
         </p>
       </footer>
     </div>
+
+    <script type="module" src="/pointcloud.js"></script>
     <script src="./assets/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

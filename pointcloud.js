@@ -79,11 +79,13 @@ function initSlider() {
 
     // Check if pointer position (pageX) is inside the container
     // sliderPos = Math.max(0, Math.min(window.innerWidth, e.pageX));
+
     const leftContainer = container.offsetLeft;
     const rightContainer = container.clientWidth + container.offsetLeft;
     sliderPos = Math.max(0, Math.min(rightContainer, e.pageX) - leftContainer);
 
-    slider.style.left = sliderPos - slider.offsetWidth / 2 + "px";
+    slider.style.left = sliderPos + leftContainer - 10 + "px";
+
     animate();
   }
 
