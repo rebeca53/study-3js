@@ -14,8 +14,8 @@ let leftScene, rightScene;
 let slider;
 let sliderPos;
 let loadingLeft, loadingRight;
-const url2017 = "./odm_georeferenced_model_subsampled.pcd";
-const url2021 = "./cloud8786d920b00cdd1a_subsampled.pcd";
+const url2018 = "./odm_georeferenced_model_subsampled.pcd";
+const url2024 = "./cloud8786d920b00cdd1a_subsampled.pcd";
 
 document.addEventListener("DOMContentLoaded", () => {
   init();
@@ -107,7 +107,7 @@ function drawPointclouds() {
   drawPointcloud(
     loadingLeft,
     loader,
-    url2017,
+    url2018,
     leftScene,
     10,
     -6,
@@ -118,7 +118,7 @@ function drawPointclouds() {
   drawPointcloud(
     loadingRight,
     loader,
-    url2021,
+    url2024,
     rightScene,
     0,
     0,
