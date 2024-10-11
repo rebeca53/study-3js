@@ -120,38 +120,24 @@ function drawSlider() {
 function drawPointclouds() {
   const loader = new PCDLoader();
 
-  drawPointcloud(
-    loadingLeft,
-    loader,
-    url2018,
-    leftScene,
-    10,
-    -6,
-    55,
-    "river.pcd"
-  );
+  drawPointcloud(loadingLeft, loader, url2018, leftScene, 10, -6, 55);
 
-  drawPointcloud(
-    loadingRight,
-    loader,
-    url2024,
-    rightScene,
-    0,
-    0,
-    55,
-    "river2024.pcd"
-  );
+  drawPointcloud(loadingRight, loader, url2024, rightScene, 0, 0, 55);
+}
+
+class Pointcloud {
+  // url to the PCD file
+  // translation information (x,y,z)
+  // deg_to_rad
 }
 
 function drawPointcloud(
   loadingSpinner,
-  loader,
   url,
   scene,
   translateX,
   translateY,
-  rotationZ,
-  pointsName
+  rotationZ
 ) {
   loadingSpinner.style.visibility = "visible";
 
@@ -159,7 +145,6 @@ function drawPointcloud(
   loader.load(url, function (points) {
     // loader.load("./odm_georeferenced_model_subsampled.pcd", function (points) {
     points.geometry.center();
-    points.name = pointsName;
 
     // Rotation uses Euler angle in rad
     // z rotation: positive is counter-clockwise, negative is clockwise
