@@ -36,12 +36,26 @@ function prepareCanvas() {
   loadingRight = document.querySelector(".loading-right");
   slider = document.querySelector(".slider");
 
+  prepareScenes();
+
+  prepareCamera();
+
+  prepareRenderer();
+
+  prepareControls();
+
+  window.addEventListener("resize", onWindowResize);
+}
+
+function prepareScenes() {
   leftScene = new THREE.Scene();
   leftScene.background = new THREE.Color(0xbcd48f);
 
   rightScene = new THREE.Scene();
   rightScene.background = new THREE.Color(0x8fbcd4);
+}
 
+function prepareCamera() {
   camera = new THREE.PerspectiveCamera(
     50, // fov gives a fish eye effect
     container.clientWidth / container.clientHeight,
@@ -50,17 +64,19 @@ function prepareCanvas() {
   );
   // sets the camera to Top View and adjust initial zoom
   camera.position.set(0, 0, 300);
+}
 
+function prepareRenderer() {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setScissorTest(true);
   container.appendChild(renderer.domElement);
+}
 
+function prepareControls() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.addEventListener("change", animate);
-
-  window.addEventListener("resize", onWindowResize);
 }
 
 function drawSlider() {
