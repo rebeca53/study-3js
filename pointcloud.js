@@ -21,6 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
   init();
 });
 
+function init() {
+  prepareCanvas();
+
+  drawSlider();
+
+  drawPointclouds();
+}
+
 function prepareCanvas() {
   container = document.querySelector(".container");
   sliderPos = container.clientWidth / 2;
@@ -95,14 +103,47 @@ function drawSlider() {
 
 function drawPointclouds() {
   const loader = new PCDLoader();
-  loadingLeft.style.visibility = "visible";
-  loadingRight.style.visibility = "visible";
+
+  drawPointcloud(
+    loadingLeft,
+    loader,
+    url2017,
+    leftScene,
+    10,
+    -6,
+    55,
+    "river.pcd"
+  );
+
+  drawPointcloud(
+    loadingRight,
+    loader,
+    url2021,
+    rightScene,
+    0,
+    0,
+    55,
+    "river2024.pcd"
+  );
+}
+
+function drawPointcloud(
+  loadingSpinner,
+  loader,
+  url,
+  scene,
+  translateX,
+  translateY,
+  rotationZ,
+  pointsName
+) {
+  loadingSpinner.style.visibility = "visible";
 
   // 'points' is an Object3D
-  loader.load(url2017, function (points) {
+  loader.load(url, function (points) {
     // loader.load("./odm_georeferenced_model_subsampled.pcd", function (points) {
     points.geometry.center();
-    points.name = "river.pcd";
+    points.name = pointsName;
 
     // Rotation uses Euler angle in rad
     // z rotation: positive is counter-clockwise, negative is clockwise
@@ -115,45 +156,13 @@ function drawPointclouds() {
     points.translateX(10);
     points.translateY(-6);
 
-    let scale = 1.1;
-    points.scale.set(scale, scale, scale);
     // Set static size
     points.material.size = 1.2;
 
-    leftScene.add(points);
+    scene.add(points);
     animate();
-    loadingLeft.style.visibility = "hidden";
+    loadingSpinner.style.visibility = "hidden";
   });
-
-  // 'points' is an Object3D
-  loader.load(url2021, function (points) {
-    // loader.load("./cloud8786d920b00cdd1a_subsampled.pcd", function (points) {
-    points.geometry.center();
-    points.name = "river2024.pcd";
-
-    // Rotation uses Euler angle in rad
-    // z rotation: positive is counter-clockwise, negative is clockwise
-    points.rotation.z = deg_to_rad(55); // make it horizontal rectangle from top view
-    // x rotation: positive rotates towards user view, negative increases the angle away from the user view
-    // points.rotation.x = -deg_to_rad(90);
-    // y rotation: at this point, like the pitch angle
-    // points.rotation.y = deg_to_rad(10);
-
-    // Set static size
-    points.material.size = 1.2;
-
-    rightScene.add(points);
-    animate();
-    loadingRight.style.visibility = "hidden";
-  });
-}
-
-function init() {
-  prepareCanvas();
-
-  drawSlider();
-
-  drawPointclouds();
 }
 
 function onWindowResize() {
