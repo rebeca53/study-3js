@@ -6,9 +6,6 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { PCDLoader } from "three/addons/loaders/PCDLoader.js";
 
-// HELPER/UTIL FUNCTIONS
-const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
-
 let container, camera, renderer, controls;
 let leftScene, rightScene;
 let slider;
@@ -120,19 +117,15 @@ function drawSlider() {
 function drawPointclouds() {
   const loader = new PCDLoader();
 
+  // rotationZ is 55 to make it horizontal rectangle from top view
   drawPointcloud(loadingLeft, loader, url2018, leftScene, 10, -6, 55);
 
   drawPointcloud(loadingRight, loader, url2024, rightScene, 0, 0, 55);
 }
 
-class Pointcloud {
-  // url to the PCD file
-  // translation information (x,y,z)
-  // deg_to_rad
-}
-
 function drawPointcloud(
   loadingSpinner,
+  loader,
   url,
   scene,
   translateX,
@@ -143,19 +136,9 @@ function drawPointcloud(
 
   // 'points' is an Object3D
   loader.load(url, function (points) {
-    // loader.load("./odm_georeferenced_model_subsampled.pcd", function (points) {
     points.geometry.center();
 
-    // Rotation uses Euler angle in rad
-    // z rotation: positive is counter-clockwise, negative is clockwise
-    points.rotation.z = deg_to_rad(rotationZ); // make it horizontal rectangle from top view
-    // // x rotation: positive rotates towards user view, negative increases the angle away from the user view
-    // // points.rotation.x = -deg_to_rad(90);
-    // // y rotation: at this point, like the pitch angle
-    // // points.rotation.y = deg_to_rad(10);
-
-    points.translateX(translateX);
-    points.translateY(translateY);
+    adjustPosition(points, translateX, translateY, rotationZ);
 
     // Set static size
     points.material.size = 1.2;
@@ -164,6 +147,16 @@ function drawPointcloud(
     animate();
     loadingSpinner.style.visibility = "hidden";
   });
+}
+
+function adjustPosition(pointcloud, translateX, translateY, rotationZ) {
+  const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
+
+  // Rotation uses Euler angle in rad
+  // z rotation: positive is counter-clockwise, negative is clockwise
+  pointcloud.rotation.z = deg_to_rad(rotationZ);
+  pointcloud.translateX(translateX);
+  pointcloud.translateY(translateY);
 }
 
 function onWindowResize() {
