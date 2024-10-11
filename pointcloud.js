@@ -16,6 +16,7 @@ let sliderPos;
 let loadingLeft, loadingRight;
 const url2017 = "./odm_georeferenced_model_subsampled.pcd";
 const url2021 = "./cloud8786d920b00cdd1a_subsampled.pcd";
+
 document.addEventListener("DOMContentLoaded", () => {
   init();
 });
@@ -48,17 +49,10 @@ function init() {
   renderer.setScissorTest(true);
   container.appendChild(renderer.domElement);
 
-  // TODO: reset button to get control to initial state
   controls = new OrbitControls(camera, renderer.domElement);
   controls.addEventListener("change", animate);
 
-  initSlider();
-  initMeshes();
-
-  window.addEventListener("resize", onWindowResize);
-}
-
-function initSlider() {
+  // Create the slider
   slider.style.visibility = "hidden";
 
   function onPointerDown() {
@@ -94,9 +88,8 @@ function initSlider() {
 
   slider.style.touchAction = "none"; // disable touch scroll
   slider.addEventListener("pointerdown", onPointerDown);
-}
 
-function initMeshes() {
+  // Load Point clouds
   const loader = new PCDLoader();
   loadingLeft.style.visibility = "visible";
   loadingRight.style.visibility = "visible";
@@ -149,6 +142,7 @@ function initMeshes() {
     animate();
     loadingRight.style.visibility = "hidden";
   });
+  window.addEventListener("resize", onWindowResize);
 }
 
 function onWindowResize() {
