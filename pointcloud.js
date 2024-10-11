@@ -147,14 +147,14 @@ function drawPointcloud(
 
     // Rotation uses Euler angle in rad
     // z rotation: positive is counter-clockwise, negative is clockwise
-    points.rotation.z = deg_to_rad(55); // make it horizontal rectangle from top view
+    points.rotation.z = deg_to_rad(rotationZ); // make it horizontal rectangle from top view
     // // x rotation: positive rotates towards user view, negative increases the angle away from the user view
     // // points.rotation.x = -deg_to_rad(90);
     // // y rotation: at this point, like the pitch angle
     // // points.rotation.y = deg_to_rad(10);
 
-    points.translateX(10);
-    points.translateY(-6);
+    points.translateX(translateX);
+    points.translateY(translateY);
 
     // Set static size
     points.material.size = 1.2;
