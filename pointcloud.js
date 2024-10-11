@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   init();
 });
 
-function init() {
+function prepareCanvas() {
   container = document.querySelector(".container");
   sliderPos = container.clientWidth / 2;
   loadingLeft = document.querySelector(".loading-left");
@@ -52,7 +52,10 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.addEventListener("change", animate);
 
-  // Create the slider
+  window.addEventListener("resize", onWindowResize);
+}
+
+function drawSlider() {
   slider.style.visibility = "hidden";
 
   function onPointerDown() {
@@ -88,8 +91,9 @@ function init() {
 
   slider.style.touchAction = "none"; // disable touch scroll
   slider.addEventListener("pointerdown", onPointerDown);
+}
 
-  // Load Point clouds
+function drawPointclouds() {
   const loader = new PCDLoader();
   loadingLeft.style.visibility = "visible";
   loadingRight.style.visibility = "visible";
@@ -142,7 +146,14 @@ function init() {
     animate();
     loadingRight.style.visibility = "hidden";
   });
-  window.addEventListener("resize", onWindowResize);
+}
+
+function init() {
+  prepareCanvas();
+
+  drawSlider();
+
+  drawPointclouds();
 }
 
 function onWindowResize() {
