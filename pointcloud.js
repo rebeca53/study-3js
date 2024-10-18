@@ -8,7 +8,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { PCDLoader } from "three/addons/loaders/PCDLoader.js";
 
 let camera, renderer, controls;
-// TASK - MeaningNames: Rename l to leftScene, r to rightScene, load to leftSpinner, loading to rightSpinner
+// TASK - Distinct and Searchable Names: Rename l to leftScene, r to rightScene, load to leftSpinner, loading to rightSpinner
 let l, r;
 let load, loading;
 
