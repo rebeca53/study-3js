@@ -154,6 +154,8 @@ function drawPointclouds() {
 }
 
 function adjustPosition(pointcloud, translateX, translateY, rotationZ) {
+  const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
+
   // Rotation uses Euler angle in rad
   // z rotation: positive is counter-clockwise, negative is clockwise
   pointcloud.rotation.z = deg_to_rad(rotationZ);
