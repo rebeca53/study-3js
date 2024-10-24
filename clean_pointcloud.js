@@ -29,11 +29,7 @@ function init() {
 }
 
 function prepareCanvas() {
-  container = document.querySelector(".container");
-  sliderPos = container.clientWidth / 2;
-  loadingLeft = document.querySelector(".loading-left");
-  loadingRight = document.querySelector(".loading-right");
-  slider = document.querySelector(".slider");
+  initializeVariables();
 
   prepareScenes();
 
@@ -44,6 +40,14 @@ function prepareCanvas() {
   prepareControls();
 
   window.addEventListener("resize", onWindowResize);
+}
+
+function initializeVariables() {
+  container = document.querySelector(".container");
+  sliderPos = container.clientWidth / 2;
+  loadingLeft = document.querySelector(".loading-left");
+  loadingRight = document.querySelector(".loading-right");
+  slider = document.querySelector(".slider");
 }
 
 function prepareScenes() {
@@ -120,20 +124,29 @@ function drawPointclouds() {
   const loader = new PCDLoader();
 
   // rotationZ is 55 to make it horizontal rectangle from top view
+  const leftLoadablePointCloud = {
+    url: url2018,
+    translateX: 10,
+    translateY: -6,
+    rotationZ: 55,
+  };
   drawPointcloud(loadingLeft, loader, url2018, leftScene, 10, -6, 55);
 
+  const rightLoadablePointCloud = {
+    url: url2024,
+    translateX: 0,
+    translateY: 0,
+    rotationZ: 55,
+  };
   drawPointcloud(loadingRight, loader, url2024, rightScene, 0, 0, 55);
 }
 
-function drawPointcloud(
-  loadingSpinner,
-  loader,
-  url,
-  scene,
-  translateX,
-  translateY,
-  rotationZ
-) {
+function drawPointcloud(loadingSpinner, loader, scene, loadablePointCloud) {
+  let url = loadablePointCloud.url;
+  let translateX = loadablePointCloud.translateX;
+  let translateY = loadablePointCloud.translateY;
+  let rotationZ = loadablePointCloud.rotationZ;
+
   loadingSpinner.style.visibility = "visible";
 
   // 'points' is an Object3D

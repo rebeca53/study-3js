@@ -1,7 +1,7 @@
 /**
  * TASK - Description (?): Add an 1-line short description of this task
  * TASK - Give yourself some credit: Add your name as an author
- * Author: Rebeca Nunes Rodrigues (rebeca.n.rod@gmail.com)
+ * Co-author: Rebeca Nunes Rodrigues (rebeca.n.rod@gmail.com)
  */
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -11,9 +11,9 @@ let camera, renderer, controls;
 // TASK 1 - Distinct and Searchable Names: Rename l to leftScene, r to rightScene, load to leftSpinner, loading to rightSpinner
 let l, r;
 let load, loading;
+// TASK 11 - Avoid Train Wrecks: Declare variables for the container and for the slider
 
 // TASK - Comments: Add a comment for this group of variables
-let slider;
 let sliderPos;
 
 // point cloud data files
@@ -26,20 +26,19 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function init() {
-  // TASK - Avoid Train Wrecks: Declare variables for the container and for the slider
-  // TASK - Abstraction: Create the function initializeVariables()
-  slider = document.querySelector(".slider");
+  // TASK 11 - Avoid Train Wrecks: Declare variables for the container and for the slider
+  // TASK 3 - Small Function, Do One Thing, Abstraction: Create function initializeVariables()
   sliderPos = document.querySelector(".container").clientWidth / 2;
   load = document.querySelector(".loading-left");
   loading = document.querySelector(".loading-right");
 
-  // TASK 3 - Small Function, Do One Thing, Abstraction: Create function prepareScenes()
+  // TASK 4 - Small Function, Do One Thing, Abstraction: Create function prepareScenes()
   l = new THREE.Scene();
   l.background = new THREE.Color(0xbcd48f);
   r = new THREE.Scene();
   r.background = new THREE.Color(0x8fbcd4);
 
-  // TASK 4 - Small Function, Do One Thing, Abstraction: Create function prepareCamera()
+  // TASK 5 - Small Function, Do One Thing, Abstraction: Create function prepareCamera()
   camera = new THREE.PerspectiveCamera(
     50, // fov gives a fish eye effect
     document.querySelector(".container").clientWidth /
@@ -50,7 +49,7 @@ function init() {
   // sets the camera to Top View and adjust initial zoom
   camera.position.set(0, 0, 300);
 
-  // TASK 5 - Small Function, Do One Thing, Abstraction: Create function prepareRenderer()
+  // TASK 6 - Small Function, Do One Thing, Abstraction: Create function prepareRenderer()
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(
@@ -60,19 +59,20 @@ function init() {
   renderer.setScissorTest(true);
   document.querySelector(".container").appendChild(renderer.domElement);
 
-  // TASK 6 - Small Function, Do One Thing, Abstraction: Create function prepareControls()
+  // TASK 7 - Small Function, Do One Thing, Abstraction: Create function prepareControls()
   controls = new OrbitControls(camera, renderer.domElement);
   controls.addEventListener("change", animate);
 
   window.addEventListener("resize", onWindowResize);
 
+  // TASK 8 - Small Function, Do One Thing, Abstraction: Create function prepareCanvas()
   drawSlider();
 
   drawPointclouds();
 }
 
 function drawSlider() {
-  slider.style.visibility = "hidden";
+  document.querySelector(".slider").style.visibility = "hidden";
 
   function onPointerDown() {
     if (event.isPrimary === false) return;
@@ -105,20 +105,24 @@ function drawSlider() {
       document.querySelector(".container").offsetLeft;
     sliderPos = Math.max(0, Math.min(rightContainer, e.pageX) - leftContainer);
 
-    slider.style.left = sliderPos - slider.offsetWidth / 4 + "px";
+    document.querySelector(".slider").style.left =
+      sliderPos - document.querySelector(".slider").offsetWidth / 4 + "px";
 
     animate();
   }
 
   // FOR ME: ADD COMMENT
-  slider.style.touchAction = "none"; // disable touch scroll
-  slider.addEventListener("pointerdown", onPointerDown);
+  document.querySelector(".slider").style.touchAction = "none"; // disable touch scroll
+  document
+    .querySelector(".slider")
+    .addEventListener("pointerdown", onPointerDown);
 }
 
 function drawPointclouds() {
   const loader = new PCDLoader();
 
-  // TASK 7 - Don't Repeat Yourself: Create function drawPointCloud and call it for each point cloud
+  // TASK 9 - Don't Repeat Yourself: Create function drawPointCloud and call it for each point cloud
+  // TASK 10 - Data Structure: Use a data structure to represent a loadablePointCloud
   load.style.visibility = "visible";
   loading.style.visibility = "visible";
 
@@ -153,19 +157,20 @@ function drawPointclouds() {
   });
 }
 
-function adjustPosition(pointcloud, translateX, translateY, rotationZ) {
+function adjustPosition(points, translateX, translateY, rotationZ) {
   const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
 
   // Rotation uses Euler angle in rad
   // z rotation: positive is counter-clockwise, negative is clockwise
-  pointcloud.rotation.z = deg_to_rad(rotationZ);
-  pointcloud.translateX(translateX);
-  pointcloud.translateY(translateY);
+  points.rotation.z = deg_to_rad(rotationZ);
+  points.translateX(translateX);
+  points.translateY(translateY);
 }
 
 /**
  * Adjust camera and renderer on window resize
  */
+// TASK - Documentation
 function onWindowResize() {
   camera.aspect =
     document.querySelector(".container").clientWidth /
@@ -182,7 +187,7 @@ function onWindowResize() {
  * Update slider position and render the scenes
  */
 function animate() {
-  slider.style.visibility = "visible";
+  document.querySelector(".slider").style.visibility = "visible";
 
   renderer.setScissor(
     0,
