@@ -90,15 +90,12 @@ function drawSlider() {
     window.removeEventListener("pointerup", onPointerUp);
   }
 
-  // FOR ME: ADD COMMENT
   function onPointerMove(e) {
     if (event.isPrimary === false) return;
 
     // FOR ME: CREATE TASK ABOUT REMOVING COMMENTS
     // Check if pointer position (pageX) is inside the container
     // sliderPos = Math.max(0, Math.min(window.innerWidth, e.pageX));
-
-    // FOR ME: CREATE TASK ABOUT TRAIN WRECKS
     const leftContainer = document.querySelector(".container").offsetLeft;
     const rightContainer =
       document.querySelector(".container").clientWidth +
@@ -111,7 +108,6 @@ function drawSlider() {
     animate();
   }
 
-  // FOR ME: ADD COMMENT
   document.querySelector(".slider").style.touchAction = "none"; // disable touch scroll
   document
     .querySelector(".slider")
