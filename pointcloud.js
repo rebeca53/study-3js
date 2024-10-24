@@ -8,7 +8,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { PCDLoader } from "three/addons/loaders/PCDLoader.js";
 
 let camera, renderer, controls;
-// TASK - Distinct and Searchable Names: Rename l to leftScene, r to rightScene, load to leftSpinner, loading to rightSpinner
+// TASK 1 - Distinct and Searchable Names: Rename l to leftScene, r to rightScene, load to leftSpinner, loading to rightSpinner
 let l, r;
 let load, loading;
 
@@ -17,7 +17,7 @@ let slider;
 let sliderPos;
 
 // point cloud data files
-// TASK - Intention-Revealing, Avoid the Chaos: Fix the dates in the variables names
+// TASK 2 - Intention-Revealing, Avoid the Chaos: Fix the dates in the variables names
 const url2017 = "./aariver_2018.pcd";
 const url2020 = "./aariver_2024.pcd";
 
@@ -28,20 +28,18 @@ document.addEventListener("DOMContentLoaded", () => {
 function init() {
   // TASK - Avoid Train Wrecks: Declare variables for the container and for the slider
   // TASK - Abstraction: Create the function initializeVariables()
-  // container = document.querySelector(".container");
   slider = document.querySelector(".slider");
-
   sliderPos = document.querySelector(".container").clientWidth / 2;
   load = document.querySelector(".loading-left");
   loading = document.querySelector(".loading-right");
 
-  // TASK - Small Function, Do One Thing, Abstraction: Create function prepareScenes()
+  // TASK 3 - Small Function, Do One Thing, Abstraction: Create function prepareScenes()
   l = new THREE.Scene();
   l.background = new THREE.Color(0xbcd48f);
   r = new THREE.Scene();
   r.background = new THREE.Color(0x8fbcd4);
 
-  // TASK - Small Function, Do One Thing, Abstraction: Create function prepareCamera()
+  // TASK 4 - Small Function, Do One Thing, Abstraction: Create function prepareCamera()
   camera = new THREE.PerspectiveCamera(
     50, // fov gives a fish eye effect
     document.querySelector(".container").clientWidth /
@@ -52,7 +50,7 @@ function init() {
   // sets the camera to Top View and adjust initial zoom
   camera.position.set(0, 0, 300);
 
-  // TASK - Small Function, Do One Thing, Abstraction: Create function prepareRenderer()
+  // TASK 5 - Small Function, Do One Thing, Abstraction: Create function prepareRenderer()
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(
@@ -62,7 +60,7 @@ function init() {
   renderer.setScissorTest(true);
   document.querySelector(".container").appendChild(renderer.domElement);
 
-  // TASK - Small Function, Do One Thing, Abstraction: Create function prepareControls()
+  // TASK 6 - Small Function, Do One Thing, Abstraction: Create function prepareControls()
   controls = new OrbitControls(camera, renderer.domElement);
   controls.addEventListener("change", animate);
 
@@ -73,7 +71,6 @@ function init() {
   drawPointclouds();
 }
 
-// FOR ME: ADD COMMENT
 function drawSlider() {
   slider.style.visibility = "hidden";
 
@@ -118,47 +115,45 @@ function drawSlider() {
   slider.addEventListener("pointerdown", onPointerDown);
 }
 
-// FOR ME: ADD COMMENT
 function drawPointclouds() {
   const loader = new PCDLoader();
 
-  // rotationZ is 55 to make it horizontal rectangle from top view
-  drawPointcloud(load, loader, url2017, l, 10, -6, 55);
-
-  drawPointcloud(loading, loader, url2020, r, 0, 0, 55);
-}
-
-// FOR ME: CREATE TASK
-function drawPointcloud(
-  loadingSpinner,
-  loader,
-  url,
-  scene,
-  translateX,
-  translateY,
-  rotationZ
-) {
-  loadingSpinner.style.visibility = "visible";
+  // TASK 7 - Don't Repeat Yourself: Create function drawPointCloud and call it for each point cloud
+  load.style.visibility = "visible";
+  loading.style.visibility = "visible";
 
   // 'points' is an Object3D
-  loader.load(url, function (points) {
+  loader.load(url2017, function (points) {
     points.geometry.center();
 
-    adjustPosition(points, translateX, translateY, rotationZ);
+    // rotationZ is 55 to make it horizontal rectangle from top view
+    adjustPosition(points, 10, -6, 55);
 
     // Set static size
     points.material.size = 1.2;
 
-    scene.add(points);
+    l.add(points);
     animate();
-    loadingSpinner.style.visibility = "hidden";
+    load.style.visibility = "hidden";
+  });
+
+  // 'points' is an Object3D
+  loader.load(url2020, function (points) {
+    points.geometry.center();
+
+    // rotationZ is 55 to make it horizontal rectangle from top view
+    adjustPosition(points, 0, 0, 55);
+
+    // Set static size
+    points.material.size = 1.2;
+
+    r.add(points);
+    animate();
+    loading.style.visibility = "hidden";
   });
 }
 
-// FOR ME: CREATE TASK
 function adjustPosition(pointcloud, translateX, translateY, rotationZ) {
-  const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
-
   // Rotation uses Euler angle in rad
   // z rotation: positive is counter-clockwise, negative is clockwise
   pointcloud.rotation.z = deg_to_rad(rotationZ);
@@ -166,7 +161,9 @@ function adjustPosition(pointcloud, translateX, translateY, rotationZ) {
   pointcloud.translateY(translateY);
 }
 
-// FOR ME: ADD COMMENT
+/**
+ * Adjust camera and renderer on window resize
+ */
 function onWindowResize() {
   camera.aspect =
     document.querySelector(".container").clientWidth /
@@ -179,7 +176,9 @@ function onWindowResize() {
   );
 }
 
-// FOR ME: ADD COMMENT
+/**
+ * Update slider position and render the scenes
+ */
 function animate() {
   slider.style.visibility = "visible";
 
