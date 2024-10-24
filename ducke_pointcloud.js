@@ -14,8 +14,8 @@ let sceneL, sceneR;
 let slider;
 let sliderPos;
 let loadingLeft, loadingRight;
-const url2017 = "./out.subsampled.pcd";
-const url2021 = "./ducke2021out.subsampled.pcd";
+const url2017 = "./ducke_2017.pcd";
+const url2021 = "./ducke_2021.pcd";
 document.addEventListener("DOMContentLoaded", () => {
   init();
 });
