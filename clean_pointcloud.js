@@ -174,6 +174,9 @@ function adjustPosition(pointcloud, translateX, translateY, rotationZ) {
   pointcloud.translateY(translateY);
 }
 
+/**
+ * Adjust camera and renderer on window resize
+ */
 function onWindowResize() {
   camera.aspect = container.clientWidth / container.clientHeight;
   camera.updateProjectionMatrix();

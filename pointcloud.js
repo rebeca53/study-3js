@@ -1,6 +1,6 @@
 /**
- * TASK - Description (?): Add an 1-line short description of this task
- * TASK - Give yourself some credit: Add your name as an author
+ * Point Cloud Comparison using Three.js
+ * TASK 12 - Documentation, Authorship: Add your name as a co-author
  * Co-author: Rebeca Nunes Rodrigues (rebeca.n.rod@gmail.com)
  */
 import * as THREE from "three";
@@ -12,8 +12,6 @@ let camera, renderer, controls;
 let l, r;
 let load, loading;
 // TASK 11 - Avoid Train Wrecks: Declare variables for the container and for the slider
-
-// TASK - Comments: Add a comment for this group of variables
 let sliderPos;
 
 // point cloud data files
@@ -25,6 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
   init();
 });
 
+// TASK 13 - Redundant and mandated comments: Remove the comment below
+/**
+ * Initialize
+ */
 function init() {
   // TASK 11 - Avoid Train Wrecks: Declare variables for the container and for the slider
   // TASK 3 - Small Function, Do One Thing, Abstraction: Create function initializeVariables()
@@ -93,8 +95,9 @@ function drawSlider() {
   function onPointerMove(e) {
     if (event.isPrimary === false) return;
 
-    // FOR ME: CREATE TASK ABOUT REMOVING COMMENTS
     // Check if pointer position (pageX) is inside the container
+    // TASK 14 - TODO, Commented-out code: Complete the TODO task
+    // TODO: Remove commented-out code
     // sliderPos = Math.max(0, Math.min(window.innerWidth, e.pageX));
     const leftContainer = document.querySelector(".container").offsetLeft;
     const rightContainer =
@@ -153,6 +156,7 @@ function drawPointclouds() {
   });
 }
 
+// TASK 15 - Documentation, JSDoc: Add a comment describing what adjustPosition is doing
 function adjustPosition(points, translateX, translateY, rotationZ) {
   const deg_to_rad = (deg) => (deg * Math.PI) / 180.0;
 
@@ -163,10 +167,7 @@ function adjustPosition(points, translateX, translateY, rotationZ) {
   points.translateY(translateY);
 }
 
-/**
- * Adjust camera and renderer on window resize
- */
-// TASK - Documentation
+// TASK 16 - Documentation, JSDoc: Add a comment describing what onWindowResize is doing
 function onWindowResize() {
   camera.aspect =
     document.querySelector(".container").clientWidth /
